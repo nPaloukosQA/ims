@@ -1,5 +1,6 @@
 package com.qa.ims.persistence.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,7 +22,7 @@ public class ItemDaoMysql implements Dao<Item> {
 	private String password;
 
 	public ItemDaoMysql(String username, String password) {
-		this.jdbcConnectionUrl = "jdbc:mysql://34.65.137.247:3306/ims";
+		this.jdbcConnectionUrl = "jdbc:mysql://34.65.200.246:3306/ims";
 		this.username = username;
 		this.password = password;
 	}
@@ -34,8 +35,8 @@ public class ItemDaoMysql implements Dao<Item> {
 
 	Item itemFromResultSet(ResultSet resultSet) throws SQLException {
 		Long itemid = resultSet.getLong("itemid");
-		String itemName = resultSet.getString("item_name");
-		String itemPrice = resultSet.getString("itemPrice");
+		String itemName = resultSet.getString("itemName");
+		BigDecimal itemPrice = BigDecimal.valueOf(Double.parseDouble(resultSet.getString("itemPrice")));
 		return new Item(itemid, itemName, itemPrice);
 	}
 	
@@ -57,24 +58,77 @@ public class ItemDaoMysql implements Dao<Item> {
 				}
 				return new ArrayList<>();
 	}
-
-
-
-	@Override
-	public Item create(Item t) {
-		// TODO Auto-generated method stub
+	
+	public Item readLatest() {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY itemid DESC LIMIT 1");) {
+			resultSet.next();
+			return itemFromResultSet(resultSet);
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
+
+	//Creates an item in the database
 	@Override
-	public Item update(Item t) {
-		// TODO Auto-generated method stub
+	public Item create(Item item) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("insert into items (itemName, itemPrice) VALUES ('" + item.getItemName()
+					+ "','" + item.getItemPrice() + "')");
+			return readLatest();
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	public Item readItem(Long itemid) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM items WHERE itemid =" + itemid);) {
+			resultSet.next();
+			return itemFromResultSet(resultSet);
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	
+//Updates an item in the database
+	@Override
+	public Item update(Item item) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("UPDATE items SET itemName ='" + item.getItemName() + "', itemPrice = '"
+					+ item.getItemPrice() + "' WHERE itemid ='" + item.getItemid() + "';");
+			return readItem(item.getItemid());
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
+
 		return null;
 	}
 
+	//deletes an item in the database
 	@Override
-	public void delete(long id) {
-		// TODO Auto-generated method stub
+	public void delete(long itemid) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("delete from items where itemid = " + itemid);
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
+
 		
 	}
 	

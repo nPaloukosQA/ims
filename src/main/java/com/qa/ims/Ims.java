@@ -53,6 +53,7 @@ public class Ims {
 		case ITEM:
 			ItemController itemController = new ItemController(
 					new ItemService(new ItemDaoMysql(username, password)));
+			doAction(itemController, action);
 			break;
 		case ORDER:
 			break;
@@ -93,7 +94,7 @@ public class Ims {
 	 * @param password
 	 */
 	public void init(String username, String password) {
-		init("jdbc:mysql://34.65.137.247:3306", username, password, "src/main/resources/sql-schema.sql");
+		init("jdbc:mysql://34.65.200.246:3306", username, password, "src/main/resources/sql-schema.sql");
 	}
 
 	public String readFile(String fileLocation) {

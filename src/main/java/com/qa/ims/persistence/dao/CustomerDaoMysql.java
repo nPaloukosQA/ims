@@ -1,7 +1,6 @@
 package com.qa.ims.persistence.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,25 +11,10 @@ import org.apache.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
 
-public class CustomerDaoMysql implements Dao<Customer> {
+public class CustomerDaoMysql extends DaoConnect implements Dao<Customer> {
 
 	public static final Logger LOGGER = Logger.getLogger(CustomerDaoMysql.class);
 
-	private String jdbcConnectionUrl;
-	private String username;
-	private String password;
-
-	public CustomerDaoMysql(String username, String password) {
-		this.jdbcConnectionUrl = "jdbc:mysql://34.65.200.246:3306/ims";
-		this.username = username;
-		this.password = password;
-	}
-
-	public CustomerDaoMysql(String jdbcConnectionUrl, String username, String password) {
-		this.jdbcConnectionUrl = jdbcConnectionUrl;
-		this.username = username;
-		this.password = password;
-	}
 
 	Customer customerFromResultSet(ResultSet resultSet) throws SQLException {
 		Long customerid = resultSet.getLong("customerid");
@@ -46,7 +30,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	 */
 	@Override
 	public List<Customer> readAll() {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("select * from customers");) {
 			ArrayList<Customer> customers = new ArrayList<>();
@@ -62,7 +46,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	}
 
 	public Customer readLatest() {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY customerid DESC LIMIT 1");) {
 			resultSet.next();
@@ -81,7 +65,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	 */
 	@Override
 	public Customer create(Customer customer) {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("insert into customers(first_name, surname) values('" + customer.getFirstName()
 					+ "','" + customer.getSurname() + "')");
@@ -94,7 +78,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	}
 
 	public Customer readCustomer(Long customerid) {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM customers where customerid = " + customerid);) {
 			resultSet.next();
@@ -115,7 +99,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	 */
 	@Override
 	public Customer update(Customer customer) {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("update customers set first_name ='" + customer.getFirstName() + "', surname ='"
 					+ customer.getSurname() + "' where customerid =" + customer.getCustomerId());
@@ -134,7 +118,7 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	 */
 	@Override
 	public void delete(long customerid) {
-		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+		try (Connection connection = databaseConnect();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("delete from customers where customerid = " + customerid);
 		} catch (Exception e) {

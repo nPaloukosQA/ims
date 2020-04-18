@@ -6,28 +6,26 @@ import java.sql.SQLException;
 
 public class DaoConnect {
 	
-	private String jdbcConnectionUrl = "jdbc:mysql://34.65.200.246:3306/ims";
-	private String username;
-	private String password;
+	private static String jdbcConnectionUrl = "jdbc:mysql://34.65.200.246:3306/ims";
+	private static String username;
+	private static String password;
 	
 	
-	public String getJdbcConnectionUrl() {
+	public static String getJdbcConnectionUrl() {
 		return jdbcConnectionUrl;
 	}
-	public void setJdbcConnectionUrl(String jdbcConnectionUrl) {
-		this.jdbcConnectionUrl = jdbcConnectionUrl;
-	}
-	public String getUsername() {
+	
+	public static String getUsername() {
 		return username;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public static void setUsername(String username1) {
+	username = username1;
 	}
-	public String getPassword() {
+	public  String getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public static void setPassword(String password1) {
+	password = password1;
 	}
 	
 	public Connection databaseConnect() throws SQLException {

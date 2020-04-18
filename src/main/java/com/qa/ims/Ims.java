@@ -16,6 +16,7 @@ import com.qa.ims.controller.CustomerController;
 import com.qa.ims.controller.ItemController;
 import com.qa.ims.controller.OrderController;
 import com.qa.ims.persistence.dao.CustomerDaoMysql;
+import com.qa.ims.persistence.dao.DaoConnect;
 import com.qa.ims.persistence.dao.ItemDaoMysql;
 import com.qa.ims.persistence.dao.OrderDaoMysql;
 import com.qa.ims.persistence.domain.Domain;
@@ -24,7 +25,7 @@ import com.qa.ims.services.ItemService;
 import com.qa.ims.services.OrderServices;
 import com.qa.ims.utils.Utils;
 
-public class Ims {
+public class Ims extends DaoConnect {
 
 	public static final Logger LOGGER = Logger.getLogger(Ims.class);
 
@@ -33,7 +34,8 @@ public class Ims {
 		String username = Utils.getInput();
 		LOGGER.info("What is your password");
 		String password = Utils.getInput();
-
+		DaoConnect.setUsername(username);
+		DaoConnect.setPassword(password);
 		init(username, password);
 
 		LOGGER.info("Which entity would you like to use?");
@@ -48,17 +50,17 @@ public class Ims {
 		switch (domain) {
 		case CUSTOMER:
 			CustomerController customerController = new CustomerController(
-					new CustomerServices(new CustomerDaoMysql(username, password)));
+					new CustomerServices(new CustomerDaoMysql()));
 			doAction(customerController, action);
 			break;
 		case ITEM:
 			ItemController itemController = new ItemController(
-					new ItemService(new ItemDaoMysql(username, password)));
+					new ItemService(new ItemDaoMysql()));
 			doAction(itemController, action);
 			break;
 		case ORDER:
 			OrderController orderController = new OrderController(
-					new OrderServices(new OrderDaoMysql(username, password)));
+					new OrderServices(new OrderDaoMysql()));
 			doAction(orderController, action);
 			break;
 		case STOP:

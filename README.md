@@ -1,68 +1,67 @@
-Coverage: 34%
-# Project Title
+Coverage: 68%
+# Project Title : IMS
 
-One Paragraph of project description goes here
+This project is based on an inventory management system. With that, you are able to connect in a SQL Database using Junit in order to control the functions of it.
+The project uses 3 tables (customers, items, orders) and the user can interact with that data using the Junit program. On that specific version of the program, you 
+can create customer in the database as well as read them, update them and delete them. The same exact functions are able of the items table as well. For the orders
+table, the project needs further developement because the create order and update order functions are not working. The project is tested through a CI pipeline and 
+for the testing and troubleshooting, i used jenkins, sonarqube, nexus and Git.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes (Jenkins, Sonarqube, Nexus, Git).
+
+1.Clone the repository on your computer.
+2.Using git bash or other command prompt that can access git, clone the repository with the command git clone (and the link of the repo).
+3.Open the project as a maven file from your IDE.
+4.You have access to the project.
+
 
 ### Prerequisites
 
 What things you need to install the software and how to install them
 
-```
-Give examples
-```
+Java SE 8 or later in order to run the jar file.
+Maven to create the jar.
+MySQL from your local machine or from GCP instance.
+Git and Git Bash
+An IDE of your choice
+Jenkins as a CI pipeline
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system. Break down into which tests and what they do
+To run the tests you can go in the location (ims\src\test\java\com\qa\ims) and incide the folders 
+are the Junit tests. In order to run use right click and choose Run as Junit tests or Coverage as Junit test per file.
 
-### Unit Tests 
-
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
 
 ### Integration Tests 
-Explain what these tests test, why and how to run them
+ Mockito is used for intergration testing. It tests how different classes interact with each other. 
 
-```
-Give an example
-```
 
 ### And coding style tests
 
-Explain what these tests test and why
+Sonarqube is used for static analysis. That tool is useful because it help me find the percentage of coverage for
+my tests, and reporting for 'smelly code', bugs and security issues.
 
-```
-Give an example
-```
+To run those tests i used the CI pipeline on jenkins with the configurations below:
 
+
+1. Login on Jenkins
+2. Start your VM instance and run the command (docker start sonarqube).
+3. Create a freestyle project and give it any name
+4. For the setup on the build window Execute a Windows batch command (for windows machines) mvn sonar:sonar -Dsonar.host.url=http://35.197.209.67:9000 -Dsonar.login.admin='your admin name' -Dsonar.password='your password' 
+5. Apply and save the settings and press build now.
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+1. Clone the repository on your computer.
+2. Using a command prompt incide the reposetory directory use the command git bash.
+3. Run the commands below:
+
+(ls target)
+(mvn clean package)
+(java -jar target/NikolaosPaloukos-SoftwareMarch16-0.2.0-SNAPSHOT-jar-with-dependencies.jar)
+
 
 ## Built With
 
@@ -84,7 +83,9 @@ This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Chris Perrins [christophperrins] (https://github.com/christophperrins/ims-demo) for providing initial code base.
+
+* Nick Johnson [nickrstewarttds] (https://github.com/nickrstewarttds) for his knowledge on the Project/Java fundementals and helping.
+
+* Jordan Harrison [JHarry444] (https://github.com/JHarry444/MarchJDBC) for training in Java wizardry and JDBC.
 # ims

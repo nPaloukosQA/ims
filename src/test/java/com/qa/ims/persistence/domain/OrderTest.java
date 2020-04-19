@@ -17,12 +17,13 @@ public class OrderTest {
 	
 	private Order order;
 	private Order other;
+	List<Long> itemid = new ArrayList<Long>();
+
 	
 	@Before
 	public void setUp() {
-		List<Long> itemid = new ArrayList<Long>();
-		order = new Order(1L, Long.valueOf(1), itemid);
-		other = new Order(1L, Long.valueOf(1), itemid);
+		order = new Order(1L, 1L, BigDecimal.valueOf(1), itemid);
+		other = new Order(1L, 1L, BigDecimal.valueOf(1), itemid);
 	}
 	
 	@Test
@@ -86,18 +87,18 @@ public class OrderTest {
 		assertTrue(order.equals(other));
 	}
 	
-//	@Test
-//	public void nullitemID() {
-//		order.setItemid(null);
-//		assertFalse(order.equals(other));
-//	}
-//	
-//	@Test
-//	public void nullitemIdOnBoth() {
-//		order.setItemid(null);
-//		other.setItemid(null);
-//		assertTrue(order.equals(other));
-//	}
+	@Test
+	public void nullOrderID() {
+		order.setOrderid(null);
+		assertFalse(order.equals(other));
+	}
+	
+	@Test
+	public void nullOrderIdOnBoth() {
+		order.setOrderid(null);
+		other.setOrderid(null);
+		assertTrue(order.equals(other));
+	}
 	
 	@Test
 	public void otherIDisDifferent() {
@@ -105,11 +106,11 @@ public class OrderTest {
 		assertFalse(order.equals(other));
 	}
 	
-//	@Test
-//	public void nullTotalPrice() {
-//		order.setTotalprice(null);
-//		assertFalse(order.equals(other));
-//	}
+	@Test
+	public void nullTotalPrice() {
+		order.setTotalprice(null);
+		assertFalse(order.equals(other));
+	}
 	
 	@Test
 	public void nullTotalPriceOnBoth () {
@@ -144,10 +145,10 @@ public class OrderTest {
 		assertEquals(order.hashCode(), other.hashCode());
 	}
 	
-//	@Test
-//	public void toStringTest() {
-//		String toString = "itemid:1 item name:Pokeball item price:200";
-//		assertEquals(toString, item.toString());
-//	}
+	@Test
+	public void toStringTest() {
+		String toString = "orderid: 1customerid: 1totalprice:1itemid[]";
+		assertEquals(toString, order.toString());
+	}
 	
 }

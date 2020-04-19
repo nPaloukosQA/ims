@@ -75,6 +75,11 @@ public class Order {
 		this.itemid = itemid;
 	}
 	
+	@Override
+	public String toString() {
+		return "orderid: " + orderid + "customerid: " + customerid + "totalprice:" + totalprice + "itemid" + itemid;
+	}
+	
 	
 	
 	@Override
@@ -115,17 +120,8 @@ public class Order {
 		if (itemid.isEmpty()) {
 			if(!other.itemid.isEmpty()) 
 				return false;
-		} else {
-			try {
-				for (int i =0; i < itemid.size(); i++) {
-					if (itemid.get(i) != other.itemid.get(i)) {
-						return false;
-					}
-				}
-			} catch (NullPointerException npe) {
-				return false;
-			}
-		}
+		} else if (!itemid.equals(other.itemid))
+			return false;
 		return true;
 	}	
 }

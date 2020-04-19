@@ -16,13 +16,14 @@ import com.qa.ims.persistence.domain.Order;
 public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 	public static final Logger LOGGER = Logger.getLogger(OrderDaoMysql.class);
 	
+	String orderidfromtable = "order.orderid";
 	
 	Order orderFromResultSet(ResultSet resultSet) throws SQLException {
-		Long orderid = (long) resultSet.getInt("orderid");
 		Long customerid = (long) resultSet.getInt("customerid");
+		Long orderid = Long.valueOf(1);
 		List<Long> itemid = readItemid(orderid);
 		BigDecimal totalprice = BigDecimal.valueOf(resultSet.getDouble("totalprice"));
-		return new Order (orderid, customerid, totalprice, itemid);
+		return new Order (customerid, totalprice, itemid);
 	}
 	
 
@@ -33,11 +34,8 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("select * from orders");) {
 					ArrayList<Order> orders = new ArrayList<>();
-					Order temporder;
-					while (resultSet.next()) {
-						temporder = orderFromResultSet(resultSet);
-			
-						orders.add(temporder);
+					while (resultSet.next()) {			
+						orders.add(orderFromResultSet(resultSet.getLong(orderidfromtable)));
 					}
 					
 					return orders;
@@ -48,26 +46,13 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 				return new ArrayList<>();
 	}
 
-	@Override
-	public Order create(Order order) {
-		if (order.getTotalprice() == null) {
-			order.setTotalprice(calculateTotalPrice(order.getItemid()));
-		}
-//		try (Connection connection =databaseConnect(); Statement statement = connection.createStatement();) {
-//		//	statement.executeUpdate("INSERT INTO orders(customerid, totalPrice") VALUES ('");
-//			statement.executeUpdate("INSERT INTO orders (customerid, totalPrice) VALUES ('" + ;
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
+	
 
-		return null;
-	}
-
-	@Override
-	public Order update(Order t) {
+	private Order orderFromResultSet(long long1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	@Override
 	public void delete(long orderid) {
@@ -107,6 +92,60 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 			}
 		}
 		return total;
+	}
+	
+	public Order readLast() {
+		try (Connection connection = databaseConnect(); Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY item_id DESC LIMIT 1");) {
+			Order tempOrder;
+			resultSet.next();
+			tempOrder = orderFromResultSet(resultSet);
+			tempOrder.setItemid(readItemid(orderFromResultSet(resultSet).getOrderid()));
+			return tempOrder;
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getStackTrace());
+			LOGGER.error(sqle.getMessage());
+		}
+		return null;
+	}
+
+
+	@Override
+	public Order create(Order createOrder) {
+		if (createOrder.getTotalprice() == null) {
+			createOrder.setTotalprice(calculateTotalPrice(createOrder.getItemid()));
+		}
+		
+		try (Connection connection = databaseConnect(); Statement statement = connection.createStatement();) {
+			statement.executeUpdate("INSERT INTO orders(customer_id, total_price, date_ordered) VALUES('" + 
+										createOrder.getCustomerid().intValue() + "','" + createOrder.getTotalprice() + "')");
+			
+			writeOrderItems(createOrder);
+			return readLast();
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getStackTrace());
+			LOGGER.error(sqle.getMessage());
+		}
+		return null;
+	}
+	
+	public void writeOrderItems(Order writeItemsOrder) {
+		try (Connection connection = databaseConnect(); Statement statement = connection.createStatement();) {
+			for (Long itemID:writeItemsOrder.getItemid()) {
+				statement.executeUpdate("INSERT INTO order_items(order_id, item_id) VALUES('" + 
+						writeItemsOrder.getOrderid() + "','" + itemID + "')");
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getStackTrace());
+			LOGGER.error(sqle.getMessage());
+		}
+	}
+
+
+	@Override
+	public Order update(Order t) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	 

@@ -5,13 +5,10 @@ import com.qa.ims.persistence.domain.Order;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.directory.InvalidAttributeIdentifierException;
 
 import org.apache.log4j.Logger;
 
-import java.math.BigDecimal;
 import com.qa.ims.services.CrudServices;
-import com.qa.ims.services.OrderServices;
 import com.qa.ims.utils.Utils;
 
 
@@ -39,26 +36,24 @@ public class OrderController implements CrudController<Order> {
 		return orders;
 	}
 	
-//	public Order read() {
-//		LOGGER.info("Please enter the order's ID: ");
-//		Long orderid = Long.getLong(getInput());
-//		Order singleOrder = orderService.read(orderid);
-//		return singleOrder;
-//	}
+
 
 	//Creates an order from the user input
 	@Override
 	public Order create() {
-		LOGGER.info("Please enter the order's id:");
-		Long orderid = Long.getLong(getInput());
-		LOGGER.info("Please enter how many items you want to order");
-		Long numberOfItems = Long.getLong(getInput());
 		List<Long> itemid = new ArrayList<>();
-		for (int i = 0; i <= numberOfItems; i++) {
-			LOGGER.info("Enter the id of the item " + i + ": ");
-			itemid.add(Long.getLong(getInput()));
+		LOGGER.info("Please enter a customer id:");
+		Long customerid = Long.valueOf(getInput());
+		String addItems = "Yes";
+		while (addItems.equalsIgnoreCase("Yes")) {
+			LOGGER.info("Please enter an itemid to add in your order");
+			LOGGER.warn("The itemid must exist in the items table");
+			Long someitem = Long.valueOf(getInput());
+			itemid.add(someitem);
+			LOGGER.info("Would you like to add another item to this order? (Enter 'Yes' to continue adding items)");
+			addItems = getInput();
 		}
-		Order order = orderService.create(new Order(orderid, itemid));
+		Order order = orderService.create(new Order(customerid, itemid));
 		LOGGER.info("Order placed");		
 		return order;
 		}
@@ -68,8 +63,21 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order update() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Long> itemid = new ArrayList<Long>();
+		LOGGER.info("Please enter the orderid that you want to update: ");
+		Long orderid = Long.valueOf(getInput());
+		String changeItems = "Yes";
+		while (changeItems.equalsIgnoreCase("Yes")) {
+			LOGGER.info("Please enter an itemid to add to the order:");
+			LOGGER.warn("The item must exist in the item table.");
+			Long someitem = Long.valueOf(getInput());
+			itemid.add(someitem);
+			LOGGER.info("Would you like to add another item to this order? Enter 'Yes' to add more");
+			changeItems = getInput();
+		}
+		Order order = orderService.update(new Order(orderid, itemid));
+		LOGGER.info("Order updated.");
+		return order;
 	}
 
 	@Override

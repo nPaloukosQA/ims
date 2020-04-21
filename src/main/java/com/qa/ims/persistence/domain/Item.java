@@ -73,8 +73,8 @@ public class Item {
 				return false;
 		} else if (!itemid.equals(other.itemid)) 
 			return false;
-		if (itemPrice == null) 
-			if (other.itemPrice != null) {
+		if (itemPrice == null) {
+			if (other.itemPrice != null) 
 				return false;
 		} else if (!itemPrice.equals(other.itemPrice)) 
 			return false;

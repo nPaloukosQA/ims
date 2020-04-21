@@ -1,15 +1,13 @@
 package com.qa.ims.controller;
 
 import com.qa.ims.persistence.domain.Order;
-import java.util.List;
 
-import javax.naming.directory.InvalidAttributeIdentifierException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import java.math.BigDecimal;
 import com.qa.ims.services.CrudServices;
-import com.qa.ims.services.OrderServices;
 import com.qa.ims.utils.Utils;
 
 
@@ -47,37 +45,18 @@ public class OrderController implements CrudController<Order> {
 	//Creates an order from the user input
 	@Override
 	public Order create() {
-		Long customerid;
-		BigDecimal totalprice = BigDecimal.valueOf(0);
-		
-		do {
-			try {
-				LOGGER.info("Please place your order");
-				Long orderid = Long.getLong(getInput());
-			} catch (NullPointerException nfe) {
-				LOGGER.info("please enter an integer number to procceed");
-			}
-		} while (customerid == null || customerid < 0);
-		
-		boolean format;	
-		boolean except;
-		do {
-			format = false;
-			try {
-				if ()
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			
-			
-			format = true;
-		} while (!format);
-		
-		
-		Order order = orderService.create(new Order(customerid, totalprice));
-		LOGGER.info("Order created");
+		LOGGER.info("Please enter the order's id:");
+		Long orderid = Long.getLong(getInput());
+		LOGGER.info("Please enter how many items you want to order");
+		Long numberOfItems = Long.getLong(getInput());
+		List<Long> itemid = new ArrayList<>();
+		for (int i = 0; i <= numberOfItems; i++) {
+			LOGGER.info("Enter the id of the item " + i + ": ");
+			itemid.add(Long.getLong(getInput()));
+		}
+		Order order = orderService.create(new Order(orderid, itemid));
+		LOGGER.info("Order placed");		
 		return order;
-			
 		}
 		
 		
@@ -85,7 +64,6 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order update() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

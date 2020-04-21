@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -17,12 +18,14 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 	
 	
 	Order orderFromResultSet(ResultSet resultSet) throws SQLException {
-		Long orderid = resultSet.getLong("orderid");
-		Long customerid = Long.valueOf(Long.parseLong(resultSet.getString("customerid")));
-		BigDecimal totalprice = BigDecimal.valueOf(Double.parseDouble(resultSet.getString("totalprice")));
-		return new Order(orderid, customerid, totalprice);
+		Long orderid = (long) resultSet.getInt("orderid");
+		Long customerid = (long) resultSet.getInt("customerid");
+		List<Long> itemid = readItemid(orderid);
+		BigDecimal totalprice = BigDecimal.valueOf(resultSet.getDouble("totalprice"));
+		return new Order (orderid, customerid, totalprice, itemid);
 	}
 	
+
 	//Reads all orders in the database
 	@Override
 	public List<Order> readAll() {
@@ -46,8 +49,17 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 	}
 
 	@Override
-	public Order create(Order t) {
-		// TODO Auto-generated method stub
+	public Order create(Order order) {
+		if (order.getTotalprice() == null) {
+			order.setTotalprice(calculateTotalPrice(order.getItemid()));
+		}
+//		try (Connection connection =databaseConnect(); Statement statement = connection.createStatement();) {
+//		//	statement.executeUpdate("INSERT INTO orders(customerid, totalPrice") VALUES ('");
+//			statement.executeUpdate("INSERT INTO orders (customerid, totalPrice) VALUES ('" + ;
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+
 		return null;
 	}
 
@@ -68,5 +80,34 @@ public class OrderDaoMysql extends DaoConnect implements Dao<Order> {
 		}
 		
 	}
+	
+	public List<Long> readItemid(Long orderid) {
+		try (Connection connection = databaseConnect(); Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT itemid FROM items WHERE orderid = " + orderid.intValue());) {
+			List<Long> itemid = new ArrayList<>();
+			while (resultSet.next()) {
+				itemid.add(resultSet.getLong(1));
+			}
+			return itemid;
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getStackTrace());
+			LOGGER.error(sqle.getMessage());
+		}
+		return Collections.emptyList();
+	}
+	
+	public BigDecimal calculateTotalPrice(List<Long> itemid) {
+		BigDecimal total = new BigDecimal(0);
+		for (Long orderid: itemid) {
+			try (Connection connection = databaseConnect(); Statement statement = connection.createStatement();
+					ResultSet resultSet = statement.executeQuery("select totalPrice FROM items WHERE itemid = " + itemid + "LIMIT 1");) {
+				total = total.add(BigDecimal.valueOf(resultSet.getLong(1)));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return total;
+	}
+	
 	 
 }

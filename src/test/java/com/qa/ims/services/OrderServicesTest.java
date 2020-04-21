@@ -2,9 +2,13 @@ package com.qa.ims.services;
 
 import java.util.ArrayList;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
 =======
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+import java.util.List;
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,15 +25,22 @@ public class OrderServicesTest {
 	
 	@Mock
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private Dao<Order> orderDao;
 =======
 	private Dao<Order> orderDaoServices;
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+	private Dao<Order> orderDao;
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 	
 	@InjectMocks
 	private OrderServices orderServices;
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 //	@Test
 //	public void orderServiceCreate() {
 //		List<Long> itemid = new ArrayList<Long>(1);
@@ -37,6 +48,7 @@ public class OrderServicesTest {
 //		orderServices.create(order);
 //		Mockito.verify(orderDao, Mockito.times(1)).readAll();
 //	}
+<<<<<<< HEAD
 =======
 	@Test
 	public void orderServicesCreate() {
@@ -67,5 +79,7 @@ public class OrderServicesTest {
 	}
 	
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 
 }

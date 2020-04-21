@@ -3,9 +3,13 @@ package com.qa.ims.services;
 import java.util.ArrayList;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
 =======
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+import java.util.List;
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 =======
 import java.util.List;
 >>>>>>> parent of c659069... commiting changes for uploading on jenkins
@@ -26,10 +30,14 @@ public class OrderServicesTest {
 	@Mock
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private Dao<Order> orderDao;
 =======
 	private Dao<Order> orderDaoServices;
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+	private Dao<Order> orderDao;
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 =======
 	private Dao<Order> orderDao;
 >>>>>>> parent of c659069... commiting changes for uploading on jenkins
@@ -39,6 +47,9 @@ public class OrderServicesTest {
 	
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 =======
 >>>>>>> parent of c659069... commiting changes for uploading on jenkins
 //	@Test
@@ -48,6 +59,7 @@ public class OrderServicesTest {
 //		orderServices.create(order);
 //		Mockito.verify(orderDao, Mockito.times(1)).readAll();
 //	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 	@Test
@@ -79,6 +91,8 @@ public class OrderServicesTest {
 	}
 	
 >>>>>>> 56de168528f315e707cd97f341c445c936b1c579
+=======
+>>>>>>> parent of c659069... commiting changes for uploading on jenkins
 =======
 >>>>>>> parent of c659069... commiting changes for uploading on jenkins
 

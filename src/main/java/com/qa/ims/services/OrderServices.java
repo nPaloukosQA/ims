@@ -12,23 +12,18 @@ public class OrderServices implements CrudServices<Order> {
 		this.orderDao = orderDao;
 	}
 	
-	
-	@Override
 	public List<Order> readAll() {
 		return orderDao.readAll();
 	}
 	
-	@Override
 	public Order create(Order order) {
 		return orderDao.create(order);
 	}
 	
-	@Override
 	public Order update(Order order) {
 		return orderDao.update(order);
 	}
 	
-	@Override
 	public void delete(Long orderid) {
 		orderDao.delete(orderid);
 	}	

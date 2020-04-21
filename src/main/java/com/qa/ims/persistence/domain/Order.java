@@ -1,46 +1,23 @@
 package com.qa.ims.persistence.domain;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Order {
 	
 	private Long orderid;
 	private Long customerid;
 	private BigDecimal totalprice;	
-	private List<Long> itemid = new ArrayList<>();
 	
-	public Order (Long customerid, List<Long> itemid) {
-		super();
-		this.customerid = customerid;
-		this.itemid = itemid;
-		
-	}
-	
-	public Order (Long orderid, Long customerid, List<Long> itemid) {
-		super();
-		this.orderid = orderid;
-		this.customerid = customerid;
-		this.itemid = itemid;
-		}
-	
-	public Order(Long customerid, BigDecimal totalprice, List<Long> itemid) {
-		super();
-		this.customerid = customerid;
-		this.totalprice = totalprice;
-		this.itemid = itemid;
-	}
-	
-	public Order(Long orderid, Long customerid, BigDecimal totalprice, List<Long> itemid) {
-		super();
+	public Order(Long orderid, Long customerid, BigDecimal totalprice) {
 		this.orderid = orderid;
 		this.customerid = customerid;
 		this.totalprice = totalprice;
-		this.itemid = itemid;
-		
 	}
 	
+	public Order(Long customerid, BigDecimal totalprice) {
+		this.customerid = customerid;
+		this.totalprice = totalprice;
+	}
 
 
 	public Long getOrderid() {
@@ -67,24 +44,19 @@ public class Order {
 		this.totalprice = totalprice;
 	}
 	
-	public List<Long> getItemid() {
-		return itemid;
-	}
-
-	public void setItemid(List<Long> itemid) {
-		this.itemid = itemid;
-	}
 	
-	
+	public String toString() {
+		return "order id" + orderid + "customer id" + customerid + "total price" + totalprice;
+		
+	}
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final int prime = 50;
 		int result = 1;
 		result = prime * result + ((orderid == null ) ? 0 : orderid.hashCode());
 		result = prime * result + ((customerid == null ) ? 0 : customerid.hashCode());
 		result = prime * result + ((totalprice == null ) ? 0 : totalprice.hashCode());
-		result = prime * result + ((itemid == null ) ? 0 : itemid.hashCode());
 		return result;
 	}
 	
@@ -112,20 +84,6 @@ public class Order {
 				return false;
 		} else if (!totalprice.equals(other.totalprice)) 
 			return false;
-		if (itemid.isEmpty()) {
-			if(!other.itemid.isEmpty()) 
-				return false;
-		} else {
-			try {
-				for (int i =0; i < itemid.size(); i++) {
-					if (itemid.get(i) != other.itemid.get(i)) {
-						return false;
-					}
-				}
-			} catch (NullPointerException npe) {
-				return false;
-			}
-		}
 		return true;
 	}	
 }
